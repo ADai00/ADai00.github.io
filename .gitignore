@@ -36,3 +36,10 @@ build/
 **-local.yml
 /mvnw.cmd
 /mvnw
+
+_site
+node_modules
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+*.sh
