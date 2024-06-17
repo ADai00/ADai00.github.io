@@ -1,7 +1,7 @@
 # Site settings
 title: ADai Blog
 SEOTitle: ADai的博客 | ADai Blog
-header-img: img/home-bg.jpg
+header-img: img/bg-walle.jpg
 email: jackdai5200@gmail.com
 description: "这里是 @ADai 的个人博客，与你一起发现更大的世界 | 要做一个有 swag 的程序员"
 keyword: "ADai, Java, Python, 博客, 程序员""
@@ -13,10 +13,10 @@ future: true
 
 # SNS settings
 RSS: false
-weibo_username:
-zhihu_username:
+weibo_username: ADai00
+zhihu_username: ADai00
 github_username: ADai00
-twitter_username:
+twitter_username: ADai00
 #facebook_username:
 #linkedin_username:
 
@@ -69,8 +69,8 @@ netease_comment: false
 # ba_track_id: [your track id]
 
 # Google Analytics
-ga_track_id:
-ga_domain:
+ga_track_id: "UA-49627206-1" # Format: UA-xxxxxx-xx
+ga_domain: huangxuan.me
 
 # Sidebar settings
 sidebar: true # whether or not using Sidebar.
@@ -91,4 +91,5 @@ page-mathjax: false
 # Friends
 friends:
   [
+    { title: "ADai", href: "https://ADai.github.io" },
   ]
