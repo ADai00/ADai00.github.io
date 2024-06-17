@@ -3,8 +3,8 @@ title: ADai Blog
 SEOTitle: ADai的博客 | ADai Blog
 header-img: img/bg-walle.jpg
 email: jackdai5200@gmail.com
-description: "这里是 @ADai 的个人博客，与你一起发现更大的世界 | 要做一个有 swag 的程序员"
-keyword: "ADai, Java, Python, 博客, 程序员""
+description: "这里是 @ADai 的个人博客"
+keyword: "ADai, Java, Python, 博客, 程序员"
 url: "https://ADai.github.io" # your host, for absolute URL
 baseurl: "" # for example, '/blog' if your blog hosted on 'host/blog'
 
