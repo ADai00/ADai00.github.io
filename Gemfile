@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
-gem 'jekyll-paginate'
 
-gem "jekyll", "~> 4.0"
-gem "rake"
-
-gem "webrick", "~> 1.7"
+gem 'jekyll',           '3.8.5'
+gem 'rouge',            '3.11.0'
+gem 'wdm',              '>= 0.1.0'
