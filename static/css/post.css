@@ -19,15 +19,13 @@
   margin: 0;
   width: 100%;
 }
-.page-post .post h1,
-.page-post .post h2 {
+.page-post .post h1{
   font-weight: normal;
   font-size: 17px;
   position: relative;
   cursor: pointer;
 }
-.page-post .post h1::before,
-.page-post .post h2::before {
+.page-post .post h1::before {
   content: '#';
   top: 0;
   font-weight: bold;
