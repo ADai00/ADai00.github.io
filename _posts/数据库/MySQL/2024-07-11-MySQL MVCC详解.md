@@ -126,13 +126,13 @@ undo log 主要有两个作用：
 
 **在 InnoDB 存储引擎中 undo log 分为两种： insert undo log 和 update undo log**：
 
-1. insert undo log : 指在insert 操作中产生的undo log。因为 insert 操作的记录只对事务本身可见，对其他事务不可见，故该 undo
+insert undo log : 指在insert 操作中产生的undo log。因为 insert 操作的记录只对事务本身可见，对其他事务不可见，故该 undo
    log 可以在事务提交后直接删除。不需要进行purge 操作
 
 **insert 时的数据初始状态：**
 ![img_1.png](img_1.png)
 
-2. update undo log: update 或 delete 操作产生的undo log。该 undo log 可能需要提供 MVCC 机制，因此不能在事务提交时就进行删除。提交时放入
+update undo log: update 或 delete 操作产生的undo log。该 undo log 可能需要提供 MVCC 机制，因此不能在事务提交时就进行删除。提交时放入
    undo log 链表，等待purge线程进行最后的删除。
 
 **数据第一次被修改时：**
@@ -184,7 +184,7 @@ undo log 主要有两个作用：
 
 ## 在 RC 下 ReadView生成情况
 
-1. **假设时间线来到T4,那么此时数据行id=1的版本链为**：
+### 1.假设时间线来到T4,那么此时数据行id=1的版本链为：
 
 ![img_6.png](img_6.png)
 
@@ -196,7 +196,7 @@ undo log 主要有两个作用：
 - 根据 DB_ROLL_PTR 找到 undo log 中的上一版本记录，上一条记录的 DB_TRX_ID 还是 101，不可见
 - 继续找上一条 DB_TRX_ID为 1，满足 1 < m_up_limit_id，可见，所以事务 103 查询到数据为 name = 菜花
 
-2. **时间线来到T6,数据的版本链为**：
+### 2.时间线来到T6,数据的版本链为：
 
 ![img_7.png](img_7.png)
 
@@ -208,7 +208,7 @@ undo log 主要有两个作用：
 - 根据 DB_ROLL_PTR 找到 undo log 中的上一版本记录，上一条记录的 DB_TRX_ID 为 101，满足 101 <m_up_limit_id，记录可见，所以在
   T6 时间点查询到数据为 name = 李四，与时间 T4 查询到的结果不一致，不可重复读！
 
-3. **时间线来到T9,数据的版本链为**：
+### 3.时间线来到T9,数据的版本链为：
 
 ![img_8.png](img_8.png)
 
@@ -221,7 +221,7 @@ ID 为 102，满足 102 < m_low_limit_id，可见，查询结果为 name = 赵�
 
 在可重复读级别下，只会在事务开始后第一次读取数据时生成一个 Read View（m_ids 列表）
 
-1. **在T4情况下的版本链为**：
+### 1.在T4情况下的版本链为：
 
 ![img_9.png](img_9.png)
 
@@ -234,7 +234,7 @@ ID 为 102，满足 102 < m_low_limit_id，可见，查询结果为 name = 赵�
 - 根据 DB_ROLL_PTR 找到 undo log 中的上一版本记录，上一条记录的 DB_TRX_ID 还是 101，不可见
 - 继续找上一条 DB_TRX_ID为 1，满足 1 < m_up_limit_id，可见，所以事务 103 查询到数据为 name = 菜花
 
-2. **在T6情况下的版本链为**：
+### 2.在T6情况下的版本链为：
 
 ![img_10.png](img_10.png)
 
@@ -247,7 +247,7 @@ ID 为 102，满足 102 < m_low_limit_id，可见，查询结果为 name = 赵�
 - 继续根据 DB_ROLL_PTR 找到 undo log 中的上一版本记录，上一条记录的 DB_TRX_ID 还是 101，不可见
 - 继续找上一条 DB_TRX_ID为 1，满足 1 < m_up_limit_id，可见，所以事务 103 查询到数据为 name = 菜花
 
-3. **在T9情况下的版本链为**：
+### 3.在T9情况下的版本链为：
 
 ![img_11.png](img_11.png)
 
@@ -257,12 +257,12 @@ ID 为 102，满足 102 < m_low_limit_id，可见，查询结果为 name = 赵�
 
 InnoDb存储引擎在RR级别下通过 MVCC + Next-Key-Lock 来解决幻读问题：
 
-1. 执行普通的select，此时会以MVCC 快照读的方式读取数据
+- 执行普通的select，此时会以MVCC 快照读的方式读取数据
 
 在快照读的情况下，RR隔离结冰只会在事务开启后的第一次查询生成 Read View，并使用至事务提交。所以在生成Read
 view之后其他事务所做的更新，插入记录版本对当前事务并不可见，实现了可重复读和防止快照读下的幻读。
 
-2. 执行 select...for update/lock in share mode、insert、update、delete 等当前读
+- 执行 select...for update/lock in share mode、insert、update、delete 等当前读
 
 在当前读下，读取的都是最新的数据，如果其它事务有插入新的记录，并且刚好在当前事务查询范围内，就会产生幻读！InnoDB 使用
 Next-key Lock 来防止这种情况。当执行当前读时，会锁定读取到的记录的同时，锁定它们的间隙，防止其它事务在查询范围内插入数据。只要我不让你插入，就不会发生幻读。
